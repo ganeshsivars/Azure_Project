@@ -47,7 +47,7 @@ steps:
   - task: DownloadSecureFile@1
     name: settings_xml
     inputs:
-      secureFile: azure_settings.xml
+      secureFile: maven_settings.xml
 
  
 
