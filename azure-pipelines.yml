@@ -5,7 +5,7 @@
 
 trigger: none
 pool: #Default
-vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
 - group: Talend-Cloud-Variables
