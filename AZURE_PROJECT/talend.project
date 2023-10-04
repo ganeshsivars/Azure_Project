@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendProperties="http://www.talend.org/properties">
+  <TalendProperties:Project xmi:id="_OGaV4WLUEe6bH8RHrR6mwA" label="Azure_Project" language="java" technicalLabel="AZURE_PROJECT" author="_OGaV4mLUEe6bH8RHrR6mwA" productVersion="Talend Cloud Data Management Platform-8.0.1.20230418_1502-patch" url="{&quot;commitLogPattern&quot;:&quot;{0}&quot;,&quot;location&quot;:&quot;https://github.com/ganeshsivar/Azure_Project.git&quot;,&quot;settings&quot;:&quot;000&quot;,&quot;storage&quot;:&quot;git&quot;}" type="DQ" itemsRelationVersion="1.3" bigData="false">
+    <migrationTask xmi:id="_OKchUGLUEe6bH8RHrR6mwA" id="org.talend.repository.model.migration.CheckProductVersionMigrationTask" breaks="7.1.0" version="7.1.1"/>
+  </TalendProperties:Project>
+  <TalendProperties:User xmi:id="_OGaV4mLUEe6bH8RHrR6mwA" login="ganeshsiva224@trial25551.eu.talend.com" firstName="Ganeshsiva" lastName="Rajakumar" type="DQ"/>
+</xmi:XMI>
