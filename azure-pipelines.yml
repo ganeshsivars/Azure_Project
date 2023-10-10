@@ -95,8 +95,18 @@ steps:
       goals: 'org.talend.ci:builder-maven-plugin:$(builder-maven-version):generateAllPoms -X' 
       options: '--batch-mode --settings $(settings_xml.secureFilePath) $(talend_ci_config)'
       publishJUnitResults: false
-
- 
+  
+  - task: CmdLine@2
+    displayName: 'List the modules / available jobs to be built'
+    inputs:
+      script: |
+        pwd
+        ls -la
+        cat $(project_name)/poms/pom.xml | sed '/<modules>/,/<\/modules>/!d'
+        echo "------------ CI Builder Log -----------"
+        cat ci-builder.log
+        echo "------------ Status Log -----------"
+        cat status.log
 
   - task: Maven@3
     displayName: 'Maven build & publish Talend artifacts to Talend Cloud'
@@ -104,3 +114,4 @@ steps:
         mavenPomFile: '$(project_name)/poms/pom.xml'
         goals: 'deploy' #compile / deploy
         options: '--batch-mode --settings $(settings_xml.secureFilePath) -pl $(jobs_to_build) -am -fae $(talend_ci_config)'
+        
