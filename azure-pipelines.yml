@@ -1,25 +1,26 @@
 # Talend CI/CD on Azure DevOps
 # Build Pipeline for building and publishing on Talend Cloud Management Console
 
- 
+#trigger:
+  #branches:
+    #include:
+    #- 'main'
 
-trigger: none
 pool: #Default
-  vmImage: 'ubuntu-latest'
+ vmImage: 'ubuntu-latest'
+ #vmImage: 'windows-2022'
 
 variables:
 - group: Talend-Cloud-Variables
 #Variable corresponding to the ci builder version you want to use to build.
 - name: builder-maven-version
-  value: 8.0.12 
+  value: 8.0.12
 #Variable corresponding to the Talend project name.
 - name: project_name
   value: 'Azure_Project'
-#Variable corresponding to the specific artifact you want to build. Define it as a variable in the GUI so it can be overwritten at runtime. If you don't use it, all existing artifacts in your project will be executed and published. 
+#Variable corresponding to the specific artifact you want to build. Define it as a variable in the GUI so it can be overwritten at runtime. If you don't use it, all existing artifacts in your project will be executed and published.
 - name: jobs_to_build
   value: 'jobs/process/job1_0.1'
-
- 
 
 - name: talend_ci_config
   value: >-
@@ -32,16 +33,8 @@ variables:
     -Dcloud.publisher.screenshot=true
     -Dcloud.publisher.environment=Dev
     -Dcloud.publisher.workspace=Azure_Project
-#/!\ For your architecture to support this configuration, the artifact repository needs to be visible from the Azure agent running your pipeline.
-#    -DaltDeploymentRepository=releases::default::$(artifact_url)/XXX/
-#Uncomment the parameters TO PUBLISH TO DOCKER: 
-#    -Pdocker
-#    -Dtalend.docker.name=$(docker_image_name)
-#    -Djkube.docker.push.registry=$(docker_registry)
-#    -Djkube.docker.username=$(docker_username)
-#    -Djkube.docker.password=$(docker_password)
-
- 
+    
+ #-Dstudio.encryption.keys.file=$(studio_keys.secureFilePath)
 
 steps:
   - task: DownloadSecureFile@1
@@ -49,22 +42,19 @@ steps:
     inputs:
       secureFile: maven_settings.xml
 
- 
-
   - task: DownloadSecureFile@1
     name: license
     inputs:
       secureFile: license
 
- 
-
   - task: DownloadSecureFile@1
     name: pom_xml
     inputs:
       secureFile: sample_pom.xml
-
- 
-
+  #- task: DownloadSecureFile@1
+    #name: studio_keys
+    #inputs:
+      #secureFile: studio.keys
   - task: CmdLine@2
     displayName: 'Download builder-maven plugins'
     inputs:
@@ -74,28 +64,24 @@ steps:
         wget -r -np -nd https://talend-update.talend.com/nexus/content/repositories/libraries/org/talend/ci/builder-maven-plugin/$(builder-maven-version)/
         ls -la
 
- 
-
   - task: Maven@3
     displayName: 'Maven install builder plugin'
     inputs:
       mavenPomFile: '$(pom_xml.secureFilePath)'
-      goals: 'install:install-file' 
+      goals: 'install:install-file'
       options: '--batch-mode --settings $(settings_xml.secureFilePath) '
       mavenOptions: |
         -Dfile=/home/vsts/work/_temp/builder-maven/builder-maven-plugin-$(builder-maven-version).jar
         -DpomFile=/home/vsts/work/_temp/builder-maven/builder-maven-plugin-$(builder-maven-version).pom
 
- 
-
   - task: Maven@3
     displayName: 'Maven install P2 and generate POMs'
     inputs:
       mavenPomFile: '$(pom_xml.secureFilePath)'
-      goals: 'org.talend.ci:builder-maven-plugin:$(builder-maven-version):generateAllPoms -X' 
+      goals: 'org.talend.ci:builder-maven-plugin:$(builder-maven-version):generateAllPoms -X'
       options: '--batch-mode --settings $(settings_xml.secureFilePath) $(talend_ci_config)'
       publishJUnitResults: false
-  
+      
   - task: CmdLine@2
     displayName: 'List the modules / available jobs to be built'
     inputs:
@@ -106,7 +92,8 @@ steps:
         echo "------------ CI Builder Log -----------"
         cat ci-builder.log
         echo "------------ Status Log -----------"
-        cat status.log
+        cat status.log   
+    
 
   - task: Maven@3
     displayName: 'Maven build & publish Talend artifacts to Talend Cloud'
@@ -115,3 +102,4 @@ steps:
         goals: 'deploy' #compile / deploy
         options: '--batch-mode --settings $(settings_xml.secureFilePath) -pl $(jobs_to_build) -am -fae $(talend_ci_config)'
         
+  
