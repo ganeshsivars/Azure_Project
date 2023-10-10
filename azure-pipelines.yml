@@ -17,7 +17,7 @@ variables:
   value: 8.0.12
 #Variable corresponding to the Talend project name.
 - name: project_name
-  value: 'Azure_Project'
+  value: 'AZURE_PROJECT'
 #Variable corresponding to the specific artifact you want to build. Define it as a variable in the GUI so it can be overwritten at runtime. If you don't use it, all existing artifacts in your project will be executed and published.
 - name: jobs_to_build
   value: 'jobs/process/job1_0.1'
@@ -31,7 +31,7 @@ variables:
     -Dservice.url=$(talend_cloud_url)
     -Dcloud.token=$(talend_cloud_token)
     -Dcloud.publisher.screenshot=true
-    -Dcloud.publisher.environment=Dev
+    -Dcloud.publisher.environment=DEV
     -Dcloud.publisher.workspace=Azure_Project
     
  #-Dstudio.encryption.keys.file=$(studio_keys.secureFilePath)
