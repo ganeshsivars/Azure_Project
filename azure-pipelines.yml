@@ -19,10 +19,10 @@ variables:
 - name: project_name
   value: 'AZURE_PROJECT'
 #Variable corresponding to the specific artifact you want to build. Define it as a variable in the GUI so it can be overwritten at runtime. If you don't use it, all existing artifacts in your project will be executed and published.
-- name: jobs_to_build
-  value: 'jobs/process/job1_0.1'
-- name: environment
-  value: 'Test'
+#- name: jobs_to_build
+#  value: 'jobs/process/job1_0.1'
+#- name: environment
+#  value: 'Test'
 
 - name: talend_ci_config
   value: >-
