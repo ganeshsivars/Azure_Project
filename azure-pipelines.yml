@@ -19,8 +19,10 @@ variables:
 - name: project_name
   value: 'AZURE_PROJECT'
 #Variable corresponding to the specific artifact you want to build. Define it as a variable in the GUI so it can be overwritten at runtime. If you don't use it, all existing artifacts in your project will be executed and published.
-- name: jobs_to_build
-  value: 'jobs/process/job2_0.1'
+#- name: jobs_to_build
+#  value: 'jobs/process/job1_0.1'
+#- name: environment
+#  value: 'Test'
 
 - name: talend_ci_config
   value: >-
@@ -31,7 +33,7 @@ variables:
     -Dservice.url=$(talend_cloud_url)
     -Dcloud.token=$(talend_cloud_token)
     -Dcloud.publisher.screenshot=true
-    -Dcloud.publisher.environment=DEV
+    -Dcloud.publisher.environment=$(environment)
     -Dcloud.publisher.workspace=Azure_Project
     
  #-Dstudio.encryption.keys.file=$(studio_keys.secureFilePath)
@@ -50,7 +52,7 @@ steps:
   - task: DownloadSecureFile@1
     name: pom_xml
     inputs:
-      secureFile: sample_pom.xml
+      secureFile: sample_pom.xml      
   #- task: DownloadSecureFile@1
     #name: studio_keys
     #inputs:
